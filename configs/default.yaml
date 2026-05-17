@@ -1,0 +1,30 @@
+dataset:
+  kaggle_slug: chuneeb/deepfake-detection-dataset-2026
+  raw_dir: data/raw
+  csv_path: data/raw/FINAL_DATASET.csv
+  images_dir: data/processed/images
+  metadata_path: data/processed/metadata_with_paths.csv
+  split_column: split
+  label_column: label_numeric
+  url_column: image_url
+  id_column: image_id
+
+download:
+  timeout_seconds: 20
+  max_workers: 16
+  image_size: 224
+  limit:
+
+training:
+  seed: 42
+  batch_size: 32
+  epochs: 5
+  learning_rate: 0.0003
+  num_workers: 2
+  pretrained: true
+  device: auto
+  output_dir: models
+  best_model_name: best_resnet18.pt
+
+reports:
+  output_dir: reports

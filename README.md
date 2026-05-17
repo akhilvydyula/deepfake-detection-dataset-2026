@@ -1,93 +1,156 @@
-# Deepfake Detection Dataset 2026
+﻿# Deepfake Detection Dataset 2026
 
+A small, reproducible baseline pipeline for the Kaggle [Deepfake Detection Dataset 2026](https://www.kaggle.com/datasets/chuneeb/deepfake-detection-dataset-2026/data).
 
+The dataset contains 6,557 face-image records with binary `REAL` / `FAKE` labels, image URLs, metadata, and split information. This repo downloads the CSV, fetches the referenced images, generates basic EDA outputs, trains a ResNet-18 baseline, and evaluates it on the held-out split.
 
-## Getting started
+## Project Layout
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.com/skills-marathon/deepfake-detection-dataset-2026.git
-git branch -M main
-git push -uf origin main
+```text
+configs/default.yaml               Pipeline settings
+scripts/download_kaggle_dataset.py Kaggle CSV download helper
+src/deepfake_detection/            Reusable pipeline code
+notebooks/                         EDA and baseline training notebooks
+data/raw/                          Downloaded Kaggle files
+data/processed/                    Downloaded images and enriched metadata
+models/                            Trained checkpoints
+reports/                           EDA and evaluation outputs
 ```
 
-## Integrate with your tools
+Large data, generated reports, and model files are ignored by Git.
 
-* [Set up project integrations](https://gitlab.com/skills-marathon/deepfake-detection-dataset-2026/-/settings/integrations)
+## Setup
 
-## Collaborate with your team
+Create and activate a virtual environment:
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+pip install -e .
+```
 
-## Test and Deploy
+Configure Kaggle API credentials before downloading. On Windows, place your `kaggle.json` token at:
 
-Use the built-in continuous integration in GitLab.
+```text
+C:\Users\<your-user>\.kaggle\kaggle.json
+```
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+## Run The Pipeline
 
-***
+Download and extract the Kaggle dataset:
 
-# Editing this README
+```powershell
+python scripts/download_kaggle_dataset.py
+```
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+Generate summary JSON and distribution plots:
 
-## Suggestions for a good README
+```powershell
+python -m deepfake_detection.eda
+```
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+Download the image URLs into split/label folders and write enriched metadata:
 
-## Name
-Choose a self-explaining name for your project.
+```powershell
+python -m deepfake_detection.download_images
+```
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Train the baseline model:
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+```powershell
+python -m deepfake_detection.train
+```
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+Evaluate the best checkpoint:
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+```powershell
+python -m deepfake_detection.evaluate --split test
+```
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+## Notebooks
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Launch Jupyter from the repo root:
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+```powershell
+jupyter notebook
+```
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Available notebooks:
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+- `notebooks/01_dataset_eda.ipynb`: inspect metadata, label balance, split distributions, missing values, and EDA plots.
+- `notebooks/02_baseline_training.ipynb`: run image download, ResNet-18 training, and test evaluation from notebook cells.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+## Configuration
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+Edit `configs/default.yaml` to adjust paths, batch size, image size, epoch count, learning rate, worker count, or Kaggle dataset slug.
+
+For quick smoke tests, set `download.limit` to a small number such as `100`. Leave it blank to process the full dataset.
+
+## Baseline
+
+The training script uses a ResNet-18 binary classifier with ImageNet pretrained weights by default. It expects `label_numeric` to use the dataset convention:
+
+- `1`: `REAL`
+- `0`: `FAKE`
+
+If the CSV includes a valid split column, the pipeline uses it. If not, it creates a stratified 70% train, 10% validation, and 20% test split.
+
+## Problems This Dataset Helps Solve
+
+The most direct task is binary deepfake classification: train a model that takes a face image and predicts `REAL` (`1`) or `FAKE` (`0`). This is useful for social media moderation, fake-profile detection, media verification, and identity fraud prevention.
+
+The dataset also supports production-style cybersecurity and KYC workflows. Synthetic faces can be used for fake accounts, scam profiles, bot identities, and fraudulent applications; a detector can provide a risk score before an account or identity check is approved.
+
+Because the CSV includes metadata, this project can go beyond raw accuracy. Columns such as `gender`, `age_group`, `image_quality`, `detection_difficulty`, `confidence_score`, and `fake_method` make it possible to measure fairness, robustness, calibration, and generalization across generative methods.
+
+## Research Directions
+
+- Generalization across generators: split fake images by `fake_method` to test whether a detector overfits to StyleGAN3 artifacts or transfers to other GAN, diffusion, or future synthetic-face methods.
+- Robustness to image quality and compression: compare high-quality and medium-quality subsets, then add augmentations for JPEG compression, resizing, blur, and lower-quality uploads.
+- Difficulty-aware detection: use `detection_difficulty` to analyze easy, medium, and hard samples, benchmark human-level versus model performance, or experiment with curriculum learning and hard example mining.
+- Fairness and demographic bias: compute per-group accuracy, precision, recall, false positive rate, and F1 across `gender` and `age_group`.
+- Confidence calibration: use `confidence_score` and model probabilities to decide when predictions are reliable enough for high-risk workflows.
+- Semi-supervised learning: use confidence scores as weak supervision or as filters for pseudo-labeling unlabeled real-world images.
+- Out-of-distribution detection: treat unknown synthetic generators as open-set or anomaly-detection cases instead of only closed-set `REAL` / `FAKE` classification.
+- Explainability and artifact localization: add Grad-CAM, saliency maps, attention heatmaps, or frequency-domain analysis to identify why an image was flagged.
+- Transfer learning and domain adaptation: fine-tune pretrained vision or face-recognition models, then test transfer to datasets such as Celeb-DF or FaceForensics++.
+- Real-world pipeline integration: use `image_url` to simulate an upload pipeline that downloads, preprocesses, scores, and flags images.
+
+## Example Project Ideas
+
+- Beginner: train a small CNN for binary `REAL` / `FAKE` classification.
+- Intermediate: fine-tune ResNet, EfficientNet, or ConvNeXt with transfer learning.
+- Advanced: compare CNNs against Vision Transformers and add explainability.
+- Expert: deploy a FastAPI or Flask service that returns a deepfake probability for uploaded images.
+- Research prompt: train a lightweight model, then analyze why it fails on hard samples, especially for the `50+` age group.
+
+## Business Applications
+
+- Fake account prevention for banking, dating, job, freelance, and social platforms.
+- Misinformation detection for synthetic political or media campaigns.
+- Trust and safety tooling for marketplaces and consumer platforms.
+- Research benchmarking for students, ML engineers, and computer vision researchers.
+
+## Key ML Challenges
+
+- Moderate class imbalance: the dataset is about 57% fake and 43% real, so class weights, oversampling, focal loss, or threshold tuning may be useful.
+- Overfitting to generator-specific artifacts.
+- Dataset and subgroup bias.
+- Robustness to compression and lower-quality uploads.
+- Real-time inference speed.
+- Explainability and confidence calibration.
+
+## Outputs
+
+- `reports/dataset_summary.json`: row counts, columns, and metadata distributions
+- `reports/*_distribution.png`: basic EDA plots
+- `data/processed/metadata_with_paths.csv`: source metadata plus local image paths and download status
+- `models/best_resnet18.pt`: best validation F1 checkpoint
+- `models/training_history.json`: epoch-level train and validation metrics
+- `reports/test_metrics.json`: final evaluation metrics and confusion matrix
 
 ## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+The Kaggle dataset is listed as `CC0: Public Domain`. Check the source dataset page for the latest license and usage notes.

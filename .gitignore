@@ -1,0 +1,25 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Local data and model outputs
+data/raw/*
+data/interim/*
+data/processed/*
+models/*
+reports/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+!models/.gitkeep
+!reports/.gitkeep
+
+# Local tooling cache
+ruvector.db
+
+# Kaggle credentials should stay in the user profile.
+kaggle.json
