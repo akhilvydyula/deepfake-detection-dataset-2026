@@ -1,0 +1,5 @@
+Metadata-Version: 2.4
+Name: deepfake-detection-dataset-2026
+Version: 0.1.0
+Summary: Baseline pipeline for the Deepfake Detection Dataset 2026 Kaggle dataset.
+Requires-Python: >=3.10

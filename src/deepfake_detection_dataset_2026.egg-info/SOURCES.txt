@@ -1,0 +1,14 @@
+README.md
+pyproject.toml
+src/deepfake_detection/__init__.py
+src/deepfake_detection/config.py
+src/deepfake_detection/data.py
+src/deepfake_detection/download_images.py
+src/deepfake_detection/eda.py
+src/deepfake_detection/evaluate.py
+src/deepfake_detection/model.py
+src/deepfake_detection/train.py
+src/deepfake_detection_dataset_2026.egg-info/PKG-INFO
+src/deepfake_detection_dataset_2026.egg-info/SOURCES.txt
+src/deepfake_detection_dataset_2026.egg-info/dependency_links.txt
+src/deepfake_detection_dataset_2026.egg-info/top_level.txt
