@@ -26,9 +26,7 @@ Create and activate a virtual environment:
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-pip install -e .
+make install
 ```
 
 Configure Kaggle API credentials before downloading. On Windows, place your `kaggle.json` token at:
@@ -42,31 +40,37 @@ C:\Users\<your-user>\.kaggle\kaggle.json
 Download and extract the Kaggle dataset:
 
 ```powershell
-python scripts/download_kaggle_dataset.py
+make download
 ```
 
 Generate summary JSON and distribution plots:
 
 ```powershell
-python -m deepfake_detection.eda
+make eda
 ```
 
 Download the image URLs into split/label folders and write enriched metadata:
 
 ```powershell
-python -m deepfake_detection.download_images
+make images
 ```
 
 Train the baseline model:
 
 ```powershell
-python -m deepfake_detection.train
+make train
 ```
 
 Evaluate the best checkpoint:
 
 ```powershell
-python -m deepfake_detection.evaluate --split test
+make evaluate
+```
+
+To run the full workflow:
+
+```powershell
+make pipeline
 ```
 
 ## Notebooks
@@ -74,7 +78,7 @@ python -m deepfake_detection.evaluate --split test
 Launch Jupyter from the repo root:
 
 ```powershell
-jupyter notebook
+make notebook
 ```
 
 Available notebooks:
@@ -87,6 +91,13 @@ Available notebooks:
 Edit `configs/default.yaml` to adjust paths, batch size, image size, epoch count, learning rate, worker count, or Kaggle dataset slug.
 
 For quick smoke tests, set `download.limit` to a small number such as `100`. Leave it blank to process the full dataset.
+
+You can pass a different config or evaluation split into Make:
+
+```powershell
+make train CONFIG=configs/default.yaml
+make evaluate SPLIT=val
+```
 
 ## Baseline
 
