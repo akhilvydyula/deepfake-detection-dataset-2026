@@ -67,6 +67,18 @@ Evaluate the best checkpoint:
 make evaluate
 ```
 
+Launch the runtime image tester after training:
+
+```powershell
+make app
+```
+
+Or run it directly:
+
+```powershell
+python -m streamlit run app.py
+```
+
 To run the full workflow:
 
 ```powershell
@@ -161,6 +173,20 @@ Because the CSV includes metadata, this project can go beyond raw accuracy. Colu
 - `models/best_resnet18.pt`: best validation F1 checkpoint
 - `models/training_history.json`: epoch-level train and validation metrics
 - `reports/test_metrics.json`: final evaluation metrics and confusion matrix
+
+## Runtime Image Testing
+
+After a checkpoint exists at `models/best_resnet18.pt`, use the Streamlit app to test a real image at runtime:
+
+```powershell
+python -m streamlit run app.py
+```
+
+The app accepts JPG, PNG, and WebP uploads and returns a `REAL` or `FAKE` label with confidence, real probability, and fake probability. You can also score one image from the command line:
+
+```powershell
+python -m deepfake_detection.predict path\to\image.jpg --config configs/default.yaml
+```
 
 ## License
 

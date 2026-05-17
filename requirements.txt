@@ -11,3 +11,4 @@ torchvision
 kaggle
 notebook
 ipykernel
+streamlit

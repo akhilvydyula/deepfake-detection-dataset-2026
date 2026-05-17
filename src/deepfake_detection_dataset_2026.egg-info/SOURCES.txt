@@ -7,6 +7,7 @@ src/deepfake_detection/download_images.py
 src/deepfake_detection/eda.py
 src/deepfake_detection/evaluate.py
 src/deepfake_detection/model.py
+src/deepfake_detection/predict.py
 src/deepfake_detection/train.py
 src/deepfake_detection_dataset_2026.egg-info/PKG-INFO
 src/deepfake_detection_dataset_2026.egg-info/SOURCES.txt

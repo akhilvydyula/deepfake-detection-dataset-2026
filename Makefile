@@ -1,4 +1,4 @@
-.PHONY: help install download eda images train evaluate pipeline notebook validate clean
+.PHONY: help install download eda images train evaluate app pipeline notebook validate clean
 
 PYTHON ?= python
 CONFIG ?= configs/default.yaml
@@ -14,6 +14,7 @@ help:
 	@echo "  make images     Download image URLs into data/processed/images"
 	@echo "  make train      Train the ResNet-18 baseline"
 	@echo "  make evaluate   Evaluate the best checkpoint on SPLIT=$(SPLIT)"
+	@echo "  make app        Launch the Streamlit runtime image tester"
 	@echo "  make pipeline   Run download, eda, images, train, and evaluate"
 	@echo "  make notebook   Launch Jupyter Notebook"
 	@echo "  make validate   Compile Python files and validate notebooks"
@@ -38,6 +39,9 @@ train:
 
 evaluate:
 	$(PYTHON) -m deepfake_detection.evaluate --config $(CONFIG) --split $(SPLIT)
+
+app:
+	$(PYTHON) -m streamlit run app.py
 
 pipeline: download eda images train evaluate
 

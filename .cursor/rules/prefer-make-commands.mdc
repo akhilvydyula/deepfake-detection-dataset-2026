@@ -1,0 +1,24 @@
+---
+description: Prefer Makefile targets for project commands
+alwaysApply: true
+---
+
+# Prefer Make Commands
+
+When running setup, validation, data, training, evaluation, app, notebook, or cleanup commands in this project, check the `Makefile` first and prefer the matching `make` target.
+
+Use the existing targets when applicable:
+
+- `make install` for dependency installation and editable package setup.
+- `make download` for Kaggle dataset download.
+- `make eda` for exploratory reports.
+- `make images` for image download and metadata enrichment.
+- `make train` for baseline model training.
+- `make evaluate` for checkpoint evaluation.
+- `make app` for the Streamlit runtime image tester.
+- `make pipeline` for the full workflow.
+- `make notebook` for Jupyter.
+- `make validate` for project validation.
+- `make clean` for generated output cleanup.
+
+If a needed action has no Make target, use the direct command and consider adding a focused Make target when it is likely to be reused.
