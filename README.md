@@ -1,5 +1,12 @@
 ﻿# Deepfake Detection Dataset 2026
 
+[![License: MIT](https://img.shields.io/github/license/akhilvydyula/deepfake-detection-dataset-2026)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-3776AB?logo=python&logoColor=white)](https://www.python.org/downloads/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![GitHub stars](https://img.shields.io/github/stars/akhilvydyula/deepfake-detection-dataset-2026?style=social)](https://github.com/akhilvydyula/deepfake-detection-dataset-2026/stargazers)
+[![Open Source](https://img.shields.io/badge/open%20source-welcome-brightgreen)](#open-source)
+
 A small, reproducible baseline pipeline for the Kaggle [Deepfake Detection Dataset 2026](https://www.kaggle.com/datasets/chuneeb/deepfake-detection-dataset-2026/data).
 
 The dataset contains 6,557 face-image records with binary `REAL` / `FAKE` labels, image URLs, metadata, and split information. This repo downloads the CSV, fetches the referenced images, generates basic EDA outputs, trains a ResNet-18 baseline, and evaluates it on the held-out split.
@@ -78,6 +85,8 @@ Or run it directly:
 ```powershell
 python -m streamlit run app.py
 ```
+
+Deploy the Streamlit app to Render with the included `render.yaml` blueprint. See `docs/render_deployment.md` for the full setup, including how to provide the trained checkpoint through `MODEL_CHECKPOINT_PATH`.
 
 To run the full workflow:
 
@@ -188,6 +197,21 @@ The app accepts JPG, PNG, and WebP uploads and returns a `REAL` or `FAKE` label 
 python -m deepfake_detection.predict path\to\image.jpg --config configs/default.yaml
 ```
 
+## Open source
+
+This repository is **open source** under the [MIT License](LICENSE). Stars, issues, and pull requests are welcome — they help others discover the project and improve it for the community.
+
+### How you can help
+
+- **Star** the repo if you find it useful — it helps visibility on GitHub Explore and search.
+- **Open an issue** for bugs, ideas, or questions.
+- **Submit a pull request** with a focused change and a clear description.
+- **Share** the project with students, colleagues, or anyone learning computer vision.
+
+Maintained by [Akhil Vydyula](https://github.com/akhilvydyula) as part of the Skills Marathon ML portfolio.
+
 ## License
 
-The Kaggle dataset is listed as `CC0: Public Domain`. Check the source dataset page for the latest license and usage notes.
+Application code is released under the [MIT License](LICENSE).
+
+The Kaggle dataset is listed as `CC0: Public Domain`. Check the [source dataset page](https://www.kaggle.com/datasets/chuneeb/deepfake-detection-dataset-2026/data) for the latest license and usage notes.
